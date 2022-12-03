@@ -11,6 +11,18 @@ enum RPSChoice {
 }
 
 impl RPSChoice {
+    fn from_intended_outcome(other_choice: RPSChoice, intended_outcome: Outcome) -> Self {
+        match (other_choice, intended_outcome) {
+            (RPSChoice::Rock, Outcome::Win) => Self::Paper,
+            (RPSChoice::Rock, Outcome::Loss) => Self::Scissors,
+            (RPSChoice::Scissors, Outcome::Win) => Self::Rock,
+            (RPSChoice::Scissors, Outcome::Loss) => Self::Paper,
+            (RPSChoice::Paper, Outcome::Win) => Self::Scissors,
+            (RPSChoice::Paper, Outcome::Loss) => Self::Rock,
+            (choice, Outcome::Draw) => choice,
+        }
+    }
+
     fn to_points(&self) -> u32 {
         match self {
             RPSChoice::Rock => 1,
@@ -55,7 +67,7 @@ fn calculate_points(left: RPSChoice, right: RPSChoice) -> [u32; 2] {
     ]
 }
 
-fn day_two() -> io::Result<u32> {
+fn day_two_part_one() -> io::Result<u32> {
     let file = File::open("inputs/day2.txt")?;
     let reader = BufReader::new(file);
 
@@ -88,6 +100,39 @@ fn day_two() -> io::Result<u32> {
     Ok(strategy_points)
 }
 
+fn day_two_part_two() -> io::Result<u32> {
+    let file = File::open("inputs/day2.txt")?;
+    let reader = BufReader::new(file);
+
+    let mut opponent_points = 0;
+    let mut strategy_points = 0;
+
+    for line in reader.lines().flatten() {
+        let opponent_choice = line.chars().nth(0).unwrap();
+        let strategy_choice = line.chars().nth(2).unwrap();
+
+        let opponent_rps_choice = match opponent_choice {
+            'A' => RPSChoice::Rock,
+            'B' => RPSChoice::Paper,
+            'C' => RPSChoice::Scissors,
+            _ => panic!(),
+        };
+        let strategy_rps_choice = match strategy_choice {
+            'X' => RPSChoice::from_intended_outcome(opponent_rps_choice, Outcome::Loss),
+            'Y' => RPSChoice::from_intended_outcome(opponent_rps_choice, Outcome::Draw),
+            'Z' => RPSChoice::from_intended_outcome(opponent_rps_choice, Outcome::Win),
+            _ => panic!(),
+        };
+
+        let round_points = calculate_points(opponent_rps_choice, strategy_rps_choice);
+
+        opponent_points += round_points[0];
+        strategy_points += round_points[1];
+    }
+
+    Ok(strategy_points)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -105,8 +150,14 @@ mod tests {
 
     #[test]
     fn test_calculate_day_two_part_one() {
-        let result = day_two().unwrap();
+        let result = day_two_part_one().unwrap();
 
         assert_eq!(result, 10310)
+    }
+    #[test]
+    fn test_calculate_day_two_part_two() {
+        let result = day_two_part_two().unwrap();
+
+        assert_eq!(result, 14859)
     }
 }
