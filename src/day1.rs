@@ -51,7 +51,7 @@ fn calculate_elf_calorie_counts(file_contents: &String) -> Vec<u32> {
     elf_calorie_counts
 }
 
-fn calculate_day1() -> u32 {
+fn calculate_day_one_part_one() -> u32 {
     let file_contents = load_file_contents(Path::new("inputs/day1.txt"));
 
     let elf_calorie_counts = calculate_elf_calorie_counts(&file_contents);
@@ -60,12 +60,29 @@ fn calculate_day1() -> u32 {
     *elf_calorie_counts.iter().max().unwrap()
 }
 
+fn calculate_day_one_part_two() -> u32 {
+    let file_contents = load_file_contents(Path::new("inputs/day1.txt"));
+
+    let mut elf_calorie_counts = calculate_elf_calorie_counts(&file_contents);
+
+    // find the top three elves with the most calories!
+    elf_calorie_counts.sort();
+
+    let len = elf_calorie_counts.len();
+    elf_calorie_counts[len - 3..].iter().sum()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn correct_value() {
-        assert!(calculate_day1() == 74394);
+    fn correct_value_part_one() {
+        assert!(calculate_day_one_part_one() == 74394);
+    }
+
+    #[test]
+    fn correct_value_part_two() {
+        assert!(calculate_day_one_part_two() == 212836);
     }
 }
