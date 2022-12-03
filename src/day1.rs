@@ -65,7 +65,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
+    fn correct_value() {
         assert!(calculate_day1() == 74394);
     }
 }
