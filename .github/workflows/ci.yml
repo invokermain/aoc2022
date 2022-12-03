@@ -1,3 +1,7 @@
+on: [push]
+
+name: CI
+
 jobs:
   run_tests:
     name: Confirm Challenge Answers
