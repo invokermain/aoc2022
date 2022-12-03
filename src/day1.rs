@@ -1,21 +1,12 @@
-use std::{fs::File, io::Read, path::Path};
+use std::path::Path;
 
-fn load_file_contents(path: &Path) -> String {
-    let mut file = File::open(path)
-        .unwrap_or_else(|_| panic!("Unable to find file at path {}", path.to_str().unwrap()));
-
-    let mut file_contents = String::new();
-
-    file.read_to_string(&mut file_contents).unwrap();
-
-    file_contents
-}
+use crate::utils::load_file_contents;
 
 fn concat_vec_of_int(vec: &[u32]) -> u32 {
     vec.iter().fold(0, |acc, elem| acc * 10 + elem)
 }
 
-fn calculate_elf_calorie_counts(file_contents: &String) -> Vec<u32> {
+fn calculate_elf_calorie_counts(file_contents: &str) -> Vec<u32> {
     let mut elf_idx = 0;
     let mut num_breaks = 0;
     let mut current_food_item = Vec::new();
