@@ -23,7 +23,7 @@ impl RPSChoice {
         }
     }
 
-    fn to_points(&self) -> u32 {
+    fn points(self) -> u32 {
         match self {
             RPSChoice::Rock => 1,
             RPSChoice::Paper => 2,
@@ -39,7 +39,7 @@ enum Outcome {
 }
 
 impl Outcome {
-    fn to_points(&self) -> u32 {
+    fn points(&self) -> u32 {
         match self {
             Outcome::Win => 6,
             Outcome::Loss => 0,
@@ -62,8 +62,8 @@ fn calculate_points(left: RPSChoice, right: RPSChoice) -> [u32; 2] {
     };
 
     [
-        outcomes[0].to_points() + left.to_points(),
-        outcomes[1].to_points() + right.to_points(),
+        outcomes[0].points() + left.points(),
+        outcomes[1].points() + right.points(),
     ]
 }
 
